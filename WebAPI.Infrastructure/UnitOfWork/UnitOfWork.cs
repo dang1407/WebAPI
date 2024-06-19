@@ -21,7 +21,8 @@ namespace WebAPI.Infrastructure
 
         public UnitOfWork(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            //_connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration.GetConnectionString("DeployConnection");
         }
 
 

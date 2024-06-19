@@ -17,8 +17,8 @@ namespace WebAPI.Application
         [Required(ErrorMessage = "Ngày xe ra khỏi bãi không được để trống.")]
         [DataType(DataType.DateTime, ErrorMessage = "Ngày xe ra khỏi bãi phải có định dạng DateTime.")]
         public DateTimeOffset? VehicleOutDate { get; set; }
-
+        public DateTimeOffset? VehicleInDate { get; set; }
         public int Vehicle { get; set; }
-        public string? VehicleInImageLink { get; set; }
+        public Guid ParkingId { get; set; }
     }
 }

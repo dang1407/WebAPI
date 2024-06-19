@@ -43,7 +43,8 @@ namespace WebAPI.Application
         [MaxLength(20, ErrorMessage = "Biển số xe không có định dạng như vậy. Vui lòng kiểm tra lại.")]
         public string LicensePlate { get; set; } = string.Empty;
         public string? AvatarLink { get; set; } = string.Empty;
-        public IFormFile? AvatarFile { get; set; }
+        public string? Email { get; set; } = string.Empty;
+
         public string? Mobile { get; set; } = string.Empty;
         public Gender? Gender { get; set; }
     }

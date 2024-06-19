@@ -30,8 +30,6 @@ namespace WebAPI.Application
         [DateNotInFuture(ErrorMessageResourceType = typeof(EmployeeResource), ErrorMessageResourceName = "DateOfBirthNotInFuture")]
         [DateOfBirthValidate(18, 70, ErrorMessageResourceType = typeof(EmployeeResource), ErrorMessageResourceName = "DateOfBirthNotValid")]
         public DateTimeOffset? DateOfBirth { get; set; }
-
-
         public Guid DepartmentId { get; set; }  
         public Gender? Gender { get; set; }
 

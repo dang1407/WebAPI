@@ -12,7 +12,10 @@ namespace WebAPI.Domain
         public string ParkMemberCode { get; set; } = string.Empty;  
         public string FullName { get; set; } = string.Empty;
 
+        public string Email {  get; set; } = string.Empty;
         public string PersonalIdentification { get; set; } = string.Empty;
+
+        public long? TotalPrice { get; set; }    
 
         public DateTimeOffset? DateOfBirth { get; set; }  
 
@@ -22,6 +25,7 @@ namespace WebAPI.Domain
         public string? AvatarLink { get; set; } = string.Empty;
         public string? Mobile { get; set; } = string.Empty;
         public Gender? Gender { get; set; } 
+        public Guid AccountId { get; set; } 
         public Guid GetId()
         {
             return ParkMemberId;    

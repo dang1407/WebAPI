@@ -15,12 +15,9 @@ namespace WebAPI.Application
         public string LicensePlate { get; set; } = string.Empty;
 
         public DateTimeOffset? VehicleOutDate { get; set; }
-
-        public int Vehicle { get; set; }
-        public string? VehicleInImageLink { get; set; }
-        public string? FullName { get; set; }
-        public string? Address { get; set; }
-        public string? Mobile { get; set; }
+        public DateTimeOffset? VehicleInDate { get; set; }
+        public int Vehicle { get; set; } = -1;
+        public Guid ParkingId { get; set; } 
 
     }
 }

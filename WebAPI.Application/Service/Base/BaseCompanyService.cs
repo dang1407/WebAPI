@@ -22,7 +22,7 @@ namespace WebAPI.Application
         /// <param name="entity">Instance của Entity</param>
         /// <returns>Thông tin Entity đã thêm thành công</returns>
         /// Created by: nkmdang (20/09/2023)
-        public async Task<TDTO> InsertAsync( TCreateDTO createDTO, Guid companyId)
+        public virtual async Task<TDTO> InsertAsync( TCreateDTO createDTO, Guid companyId)
         {
             var entity = MapCreateDTOToEntity(createDTO);
             if(entity.GetId() == Guid.Empty)
@@ -76,7 +76,7 @@ namespace WebAPI.Application
         /// <param name="entity">Instance của Entity</param>
         /// <returns>Thông tin của Entity sau khi đã thay đổi</returns>
         /// Created by: nkmdang (20/09/2023)
-        public async Task<TDTO> UpdateAsync( Guid id, TUpdateDTO updateDTO , Guid companyId)
+        public virtual async Task<TDTO> UpdateAsync( Guid id, TUpdateDTO updateDTO , Guid companyId)
         {
             var entity = await BaseCompanyRepository.GetByIdAsync(id, companyId);
 

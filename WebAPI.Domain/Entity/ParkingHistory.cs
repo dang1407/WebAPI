@@ -15,15 +15,11 @@ namespace WebAPI.Domain
         public string ParkSlotCode { get; set; } = string.Empty;
         public int ParkSlotState { get; set; }
         public DateTimeOffset? VehicleOutDate { get; set; }
-
+        public DateTimeOffset? VehicleInDate { get; set; }
+        public Guid ParkingId { get; set; } 
         public string? VehicleInImageLink {get; set;}
-        public int Vehicle { get; set; }
+        public int Vehicle { get; set; } = -1;
 
-        public string? FullName { get; set; }   
-        public string? Address { get; set; }    
-        public string? Mobile { get; set; } 
-
-        public string? Floor {  get; set; } 
         public Guid GetId()
         {
             return ParkingHistoryId;

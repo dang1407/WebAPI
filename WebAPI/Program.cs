@@ -70,7 +70,7 @@ builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IDepartmentValidate, DepartmentValidate>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();  
-builder.Services.AddScoped<IUserService, UserService>();    
+builder.Services.AddScoped<IAccountService, AccountService>();    
 
 builder.Services.AddScoped<IParkMemberService, ParkMemberService>();    
 builder.Services.AddScoped<IParkMemberRepository, ParkMemberRepository>();  
@@ -82,7 +82,11 @@ builder.Services.AddScoped<IParkingHistoryRepository, ParkingHistoryRepository>(
 builder.Services.AddScoped<IParkingHistoryService, ParkingHistoryService>();
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();    
 builder.Services.AddScoped<ITitleService, TitleService>();
-builder.Services.AddScoped<ITitleRepository, TitleRepository>();    
+builder.Services.AddScoped<ITitleRepository, TitleRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();    
+builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<IParkingRepository, ParkingRepository>(); 
+builder.Services.AddScoped<IParkingService, ParkingService>();  
 // Unit Of Work
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 

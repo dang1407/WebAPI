@@ -80,7 +80,7 @@ namespace WebAPI.Infrastructure
             }
             else if(entity is ParkSlot)
             {
-                sql = "INSERT INTO parkslot (ParkSlotId, ParkSlotCode, ParkSlotState, Vehicle, Floor) VALUES (@ParkSlotId, @ParkSlotCode, @ParkSlotState, @Vehicle, @Floor);";
+                sql = "INSERT INTO parkslot (ParkSlotId, ParkSlotCode, ParkSlotState, Vehicle, ParkingId, VehicleInDate, CreatedDate, CreatedBy) VALUES (@ParkSlotId, @ParkSlotCode, @ParkSlotState, @Vehicle, @ParkingId, @VehicleInDate, @CreatedDate, @CreatedBy);";
             }
             else if(entity is ParkingHistory)
             {

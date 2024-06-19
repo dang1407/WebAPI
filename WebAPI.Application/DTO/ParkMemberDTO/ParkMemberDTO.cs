@@ -14,8 +14,10 @@ namespace WebAPI.Application
         public string ParkMemberCode { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
 
+        public string? Email {  get; set; } = string.Empty;
         public string PersonalIdentification { get; set; } = string.Empty;
 
+        public long? TotalPrice { get; set; }
         public DateTimeOffset? DateOfBirth { get; set; }
 
         public string? Address { get; set; } = string.Empty;

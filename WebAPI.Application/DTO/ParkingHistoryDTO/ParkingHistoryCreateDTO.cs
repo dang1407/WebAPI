@@ -16,12 +16,9 @@ namespace WebAPI.Application
         public string? LicensePlate { get; set; } = string.Empty;
 
         public DateTimeOffset? VehicleOutDate { get; set; }
-        [Required(ErrorMessage = "Mã vị trí gửi xe không được để trống.")]
-
-
+        public DateTimeOffset VehicleInDate { get; set; }   
         public int Vehicle { get; set; }
-        public string? VehicleInImageLink { get; set; }
+        public Guid ParkingId { get; set; }
 
-        public IFormFile? VehicleInImage { get; set; }   
     }
 }

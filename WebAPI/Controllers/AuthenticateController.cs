@@ -21,9 +21,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase  
     {
-        private readonly IUserService _userService;
+        private readonly IAccountService _userService;
         public IConfiguration _configuration;
-        public AuthenticateController(IUserService userService, IConfiguration configuration) 
+        public AuthenticateController(IAccountService userService, IConfiguration configuration) 
         {
             _userService = userService; 
             _configuration = configuration; 
@@ -32,7 +32,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<ActionResult> LoginAsync([FromBody] AccountDTO loginDTO, Guid companyId)
+        public async Task<ActionResult> LoginAsync([FromBody] AccountDTO loginDTO)
         {
             if (string.IsNullOrEmpty(loginDTO.UserName) || string.IsNullOrEmpty(loginDTO.Password))
             {
@@ -65,7 +65,7 @@ namespace WebAPI.Controllers
                         new Claim(ClaimTypes.Role, user.Role),
                     }),
                     
-                    Expires = DateTime.UtcNow.AddMinutes (60),
+                    Expires = DateTime.UtcNow.AddDays(1),
                     Issuer = issuer,
                     Audience = audience,
                     SigningCredentials = new SigningCredentials

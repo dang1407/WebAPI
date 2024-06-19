@@ -9,8 +9,8 @@ namespace WebAPI.Application
         {
             CreateMap<Account, AccountDTO>();
             CreateMap<AccountDTO, Account>();
-            CreateMap<RegisterDTO, Account>();
-            CreateMap<ForgotPasswordDTO, Account>();
+            CreateMap<AccountCreateDTO, Account>();
+            CreateMap<AccountUpdateDTO, Account>();
         }    
     }
 }

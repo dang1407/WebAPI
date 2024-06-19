@@ -18,6 +18,7 @@ namespace WebAPI.Application
         Task<string> GetNewParkMemberCodeAsync( Guid companyId);
 
         Task<List<ParkMemberDTO>> GetByListIdAsync(List<Guid> ids, Guid companyId);
+        Task<List<ParkMemberDTO>> GetTopParkMemberAsync(string? year, string? month, int limit, Guid companyId);
 
         #region Chức năng xuất file excel
         /// <summary>

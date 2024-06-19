@@ -86,5 +86,44 @@ namespace WebAPI.Infrastructure
                 return parkingHistory;
             }
         }
+
+        public async Task<List<ParkingHistory>> GetStatisticalParkingHistoryAsync(string year, int vehicle, Guid companyId)
+        {
+            string sql = "";
+            var yearSplit = year.Split(",");
+            var param = new DynamicParameters();
+            param.Add("CompanyId", companyId.ToString());
+            param.Add("year", yearSplit);
+            param.Add("Vehicle", vehicle);
+            if (yearSplit.Length > 1 )
+            {
+                if(0<= vehicle && vehicle <= 2)
+                {
+                    sql = "Select p.* from ParkingHistory p, Parking p1 where p.ParkingId = p1.ParkingId and p1.CompanyId = @CompanyId and YEAR(p.VehicleInDate) in @year and Vehicle = @Vehicle;";
+                    
+                }
+                else
+                {
+                    sql = "Select p.* from ParkingHistory p, Parking p1 where p.ParkingId = p1.ParkingId and p1.CompanyId = @CompanyId and YEAR(p.VehicleInDate) in @year;";
+                }
+            }  
+            else
+            {
+                if (0 <= vehicle && vehicle <= 2)
+                {
+                    sql = "Select p.* from ParkingHistory p, Parking p1 where p.ParkingId = p1.ParkingId and p1.CompanyId = @CompanyId and YEAR(p.VehicleInDate) = @year and Vehicle = @Vehicle;";
+
+                }
+                else
+                {
+                    sql = "Select p.* from ParkingHistory p, Parking p1 where p.ParkingId = p1.ParkingId and p1.CompanyId = @CompanyId and YEAR(p.VehicleInDate) = @year;";
+                    //sql = "Select p.* from ParkingHistory p, Parking p1 where p.ParkingId = p1.ParkingId and p1.CompanyId = @CompanyId";
+                }
+            }
+            var result = await Uow.Connection.QueryAsync<ParkingHistory>(sql, param, transaction: Uow.Transaction); 
+            return result.ToList();
+        }
+
+        
     }
 }

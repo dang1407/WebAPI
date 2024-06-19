@@ -29,6 +29,32 @@ namespace WebAPI.Infrastructure
             return result;
         }
 
+        public async Task<List<ParkMember>> GetTopParkMemberAsync(string? year, string? month, int limit, Guid companyId)
+        {
+            string sql = "";
+            if (string.IsNullOrEmpty(year))
+            {
+                sql = "SELECT p.*, TopParkMember.TotalPrice FROM parkmember p, (SELECT  p.ParkMemberCode, SUM(p.Price) AS TotalPrice FROM parkinghistory p WHERE (NOT p.ParkMemberCode = '' and CompanyId = @CompanyId) GROUP BY p.ParkMemberCode LIMIT @Limit) AS TopParkMember WHERE p.ParkMemberCode = TopParkMember.ParkMemberCode  ORDER BY TopParkMember.TotalPrice DESC";
+            } else
+            {
+                if(string.IsNullOrEmpty(month)) 
+                {
+                    sql = "SELECT p.*, TopParkMember.TotalPrice FROM parkmember p, (SELECT  p.ParkMemberCode, SUM(p.Price) AS TotalPrice FROM parkinghistory p WHERE (NOT p.ParkMemberCode = '' and CompanyId = @CompanyId AND Year(VehicleOutDate) = @Year) GROUP BY p.ParkMemberCode LIMIT @Limit) AS TopParkMember WHERE p.ParkMemberCode = TopParkMember.ParkMemberCode  ORDER BY TopParkMember.TotalPrice DESC";
+                } 
+                else
+                {
+                    sql = "SELECT p.*, TopParkMember.TotalPrice FROM parkmember p, (SELECT  p.ParkMemberCode, SUM(p.Price) AS TotalPrice FROM parkinghistory p WHERE (NOT p.ParkMemberCode = '' and CompanyId = @CompanyId AND Year(VehicleOutDate) = @Year AND Month(VehicleOutDate) = @Month) GROUP BY p.ParkMemberCode LIMIT @Limit) AS TopParkMember WHERE p.ParkMemberCode = TopParkMember.ParkMemberCode  ORDER BY TopParkMember.TotalPrice DESC";
+                }
+            }
+            var param = new DynamicParameters();
+            param.Add("Year", year);
+            param.Add("Month", month);
+            param.Add("Limit", limit);
+            param.Add("CompanyId", companyId);
+            var result = await Uow.Connection.QueryAsync<ParkMember>(sql, param, transaction: Uow.Transaction);
+            return result.ToList();
+        }
+
 
         #region Chức năng xuất file excel
         /// <summary>
