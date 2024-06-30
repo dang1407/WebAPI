@@ -60,7 +60,6 @@ namespace WebAPI.Application
         [RegularExpression(@"^.+@gmail\.com$", ErrorMessageResourceType = typeof(EmployeeResource), ErrorMessageResourceName = "EmailNotValid")]
         public string? Email { get; set; }
 
-        public IFormFile? AvatarFile { get; set; }
         public string? AvatarLink { get; set; }
         #endregion
 

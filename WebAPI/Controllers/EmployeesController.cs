@@ -7,6 +7,7 @@ using WebAPI.Domain;
 using WebAPI.Application;
 using OfficeOpenXml;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace WebAPI.Controllers
 {
@@ -55,10 +56,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("EmployeesExcel/{companyId}")]
-        public async Task<dynamic> ExportCurrentPageExcelAsync(int page, int pageSize, string? searchProperty, Guid companyId)
+        [Route("EmployeesExcel")]
+        public async Task<dynamic> ExportCurrentPageExcelAsync(int page, int pageSize, string? searchProperty)
         {
-            
+            Guid companyId = Guid.Parse(HttpContext.User.FindFirstValue("CompanyId"));
             var employees = await BaseCompanyReadOnlyService.GetFilterAsync(page, pageSize, searchProperty, companyId);
             // Lấy ra dữ liệu excel dạng byte
             var excelBytes = await _employeeService.ExportEmployeeExcelAsync(employees, page, pageSize);
