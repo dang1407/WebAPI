@@ -21,9 +21,9 @@ namespace WebAPI.Controllers
     [ApiController]
     public class AuthenticateController : ControllerBase  
     {
-        private readonly IAccountService _userService;
+        private readonly IUserService _userService;
         public IConfiguration _configuration;
-        public AuthenticateController(IAccountService userService, IConfiguration configuration) 
+        public AuthenticateController(IUserService userService, IConfiguration configuration) 
         {
             _userService = userService; 
             _configuration = configuration; 
@@ -109,24 +109,7 @@ namespace WebAPI.Controllers
 
             return Ok(roles);
         }
-        static string ComputeSha256Hash(string rawData)
-        {
-            // Create a SHA256
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                // ComputeHash - returns byte array
-                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
-
-                // Convert byte array to a string
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-                return builder.ToString();
-            }
-        }
-
+        
         [HttpPost]
         [Route("refresh-token/{companyId}")]
         public async Task<IActionResult> RefreshToken(TokenModel tokenModel, Guid companyId )
@@ -210,6 +193,26 @@ namespace WebAPI.Controllers
                 return BadRequest();
             }
         }
+
+        static string ComputeSha256Hash(string rawData)
+        {
+            // Create a SHA256
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                // ComputeHash - returns byte array
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+
+                // Convert byte array to a string
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
+
         public static string GenerateVerificationCode()
         {
             return Guid.NewGuid().ToString().Replace("-", "").Substring(0, 6);
@@ -262,6 +265,7 @@ namespace WebAPI.Controllers
 
     }
 
+    
 
     public class TokenModel
     {

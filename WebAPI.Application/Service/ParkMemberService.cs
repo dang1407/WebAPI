@@ -12,12 +12,14 @@ namespace WebAPI.Application
     {
 
         private readonly IParkMemberRepository _parkMemberRepository;
-        private readonly IAccountService _accountService;
-        public ParkMemberService(IParkMemberRepository parkMemberRepository, IAccountService accountService, IMapper mapper) : base(parkMemberRepository, mapper)
+        private readonly IUserService _accountService;
+        private readonly IPasswordService _passwordService;   
+        public ParkMemberService(IParkMemberRepository parkMemberRepository, IUserService accountService, IMapper mapper, IPasswordService passwordService) : base(parkMemberRepository, mapper)
         {
 
             _parkMemberRepository = parkMemberRepository;   
             _accountService = accountService; 
+            _passwordService = passwordService; 
         }
 
         public Task<byte[]> ExportParkMemberExcelAsync(List<ParkMemberDTO> parkMemberDTOs, int page, int pageSize)
@@ -62,21 +64,33 @@ namespace WebAPI.Application
         /// <exception cref="Exception">Lỗi khi tạo Account</exception>
         public override async Task<ParkMemberDTO> InsertAsync(ParkMemberCreateDTO createDTO, Guid companyId)
         {
+            if (string.IsNullOrEmpty(createDTO.ParkMemberCode))
+            {
+                createDTO.ParkMemberCode = await GetNewParkMemberCodeAsync(companyId);
+            }
             var account = new AccountCreateDTO();
             account.UserName = createDTO.UserName;
-            account.Password = createDTO.Password;
+            account.Password = _passwordService.ComputeSha256Hash(createDTO.Password);
             account.RewritePassword = createDTO.Password;
             account.CompanyId = companyId;
-            account.AccountId = new Guid();
-            var parkMemberEntity = MapCreateDTOToEntity(createDTO);
-            parkMemberEntity.AccountId = account.AccountId;
-            var newParkMember = await base.InsertAsync(createDTO, companyId);
+            account.AccountId = Guid.NewGuid();
+            account.Role = "parkmember";
+            createDTO.AccountId = account.AccountId;    
+              
             var newAccount = await _accountService.InsertAsync(account, companyId);
-            if(newAccount != null)
+            if (newAccount == null)
             {
                 throw new Exception("Lỗi khi tạo Account cho ParkMember");
-            } 
+            }
+            try
+            {
+            var newParkMember = await base.InsertAsync(createDTO, companyId);
             return newParkMember;
+            } catch(Exception ex) 
+            {
+                await _accountService.DeleteAsync(account.AccountId, companyId);
+                throw new Exception("Lỗi hệ thống");
+            }     
         }
 
 

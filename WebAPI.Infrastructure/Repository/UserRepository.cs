@@ -14,11 +14,11 @@ namespace WebAPI.Infrastructure
 
         public async Task<Account?> FindAccountAsync(string username)
         {
-            string sql = "Proc_Read_User";
+            string sql = "SELECT * FROM account where UserName = @UserName;";
             var param = new DynamicParameters();
-            param.Add("p_UserName", username);   
+            param.Add("UserName", username);   
      
-            var user = await Uow.Connection.QuerySingleOrDefaultAsync<Account>(sql, param, commandType: System.Data.CommandType.StoredProcedure, transaction: Uow.Transaction);
+            var user = await Uow.Connection.QuerySingleOrDefaultAsync<Account>(sql, param);
             return user;
         }
 
@@ -34,7 +34,7 @@ namespace WebAPI.Infrastructure
             }
             var param = new DynamicParameters();
             param.Add("AccountId", accountId);
-            var result = await Uow.Connection.QueryAsync(sql, param, transaction: Uow.Transaction);
+            var result = await Uow.Connection.QueryAsync(sql, param);
             return result;
         }
 
@@ -49,7 +49,7 @@ namespace WebAPI.Infrastructure
                 param.Add("p_" + property.Name, property.GetValue(account));
             }
             var result = await Uow.Connection.QueryFirstOrDefaultAsync(sql, param, commandType: System.Data.CommandType.StoredProcedure, transaction: Uow.Transaction);
-            return 0;
+            return 1;
         }
     }
 }

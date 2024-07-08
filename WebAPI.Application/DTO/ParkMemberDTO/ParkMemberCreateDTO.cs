@@ -11,7 +11,7 @@ namespace WebAPI.Application
 {
     public class ParkMemberCreateDTO : BaseDTO
     {
-        public Guid ParkMemberId { get; set; }
+        public Guid ParkMemberId { get; set; } = Guid.NewGuid();    
 
         [Required(ErrorMessage = "Username không để trống")]
         public string UserName { get; set; }  = string.Empty;
@@ -21,8 +21,8 @@ namespace WebAPI.Application
 
         public string Role = "parkmember";
 
-        [Required(ErrorMessage = "Mã khách hàng gửi xe không được để trống.")]
-        [RegularExpression(@"PMB-00[0-9]{4}", ErrorMessage = "Mã khách hàng gửi xe phải có định dạng PMB-00abcd với a, b, c, d là các chữ số.")]
+        //[Required(ErrorMessage = "Mã khách hàng gửi xe không được để trống.")]
+        //[RegularExpression(@"PMB-00[0-9]{4}", ErrorMessage = "Mã khách hàng gửi xe phải có định dạng PMB-00abcd với a, b, c, d là các chữ số.")]
         public string ParkMemberCode { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Họ tên khách hàng không được để trống.")]
@@ -47,5 +47,6 @@ namespace WebAPI.Application
 
         public string? Mobile { get; set; } = string.Empty;
         public Gender? Gender { get; set; }
+        public Guid? AccountId { get; set; }    
     }
 }

@@ -17,19 +17,38 @@ namespace WebAPI.Application
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IEmployeeValidate _employeeValidate;
         private readonly ITitleRepository _titleRepository;
+        private readonly IUserService _userService; 
+        private readonly IMapper _mapper;   
+        private readonly IPasswordService _passwordService; 
         public EmployeeService(IEmployeeRepository employeeRepository, IEmployeeValidate employeeValidate, 
-          ITitleRepository titleRepository , IMapper mapper) : base(employeeRepository, mapper)
+          ITitleRepository titleRepository , IMapper mapper, IUserService userService, IPasswordService passwordService) : base(employeeRepository, mapper)
         {
             _employeeRepository = employeeRepository;
             _employeeValidate = employeeValidate;   
             _titleRepository = titleRepository; 
+            _userService = userService; 
+            _mapper = mapper;  
+            _passwordService = passwordService; 
         }
 
 
-        
 
 
-        
+        public override async Task<EmployeeDTO> InsertAsync(EmployeeCreateDTO createDTO, Guid companyId)
+        {
+            if(string.IsNullOrEmpty(createDTO.EmployeeCode))
+            {
+                createDTO.EmployeeCode = await GetNewEmployeeCodeAsync(companyId);
+            }
+            var account = new Account();
+            account.CompanyId = companyId;
+            account.UserName = createDTO.UserName;
+            account.Password = _passwordService.ComputeSha256Hash(createDTO.Password);
+            account.AccountId = Guid.NewGuid();
+            account.Role = "employee";
+            return await base.InsertAsync(createDTO, companyId);
+        }
+
 
         /// <summary>
         /// Hàm lấy mã nhân viên mới
@@ -38,6 +57,7 @@ namespace WebAPI.Application
         /// Created by: nkmdang (27/09/2023)
         public async Task<string> GetNewEmployeeCodeAsync(Guid companyId)
         {
+            
             var result = await _employeeRepository.GetNewEmployeeCodeAsync(companyId);   
             return result;  
         }

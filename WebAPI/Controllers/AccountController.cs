@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebAPI.Application;
@@ -8,11 +9,11 @@ namespace WebAPI.Controllers
 {
     public class AccountController : BaseCompanyController<AccountDTO, AccountCreateDTO, AccountUpdateDTO>
     {
-        private readonly IAccountService _userService; 
+        private readonly IUserService _userService; 
         private readonly IEmployeeService _employeeService; 
         private readonly IParkMemberService _parkMemberService; 
 
-        public AccountController(IAccountService userService, IEmployeeService employeeService, IParkMemberService parkMemberService) : base(userService)
+        public AccountController(IUserService userService, IEmployeeService employeeService, IParkMemberService parkMemberService) : base(userService)
         {
             _userService = userService;
             _employeeService = employeeService;
@@ -46,6 +47,34 @@ namespace WebAPI.Controllers
 
             }
             return Unauthorized();
+        }
+
+        [Authorize(Roles = "parkmember")]
+        [HttpPut]
+        [Route("parkmember")]
+        public async Task<IActionResult> UpdateParkMemberInforAsync([FromBody] ParkMemberUpdateDTO parkMemberUpdateDTO)
+        {
+            Guid companyId = Guid.Parse(HttpContext.User.FindFirstValue("CompanyId"));
+            var result = await _parkMemberService.UpdateAsync(parkMemberUpdateDTO.ParkMemberId, parkMemberUpdateDTO, companyId);
+            return Ok(result);  
+        }
+
+        [Authorize(Roles = "employee")]
+        [HttpPut]
+        [Route("employee")]
+        public async Task<IActionResult> UpdateEmployeeInforAsync([FromBody] EmployeeUpdateDTO employeeUpdateDTO)
+        {
+            Guid companyId = Guid.Parse(HttpContext.User.FindFirstValue("CompanyId"));
+            var result = await _employeeService.UpdateAsync(employeeUpdateDTO.EmployeeId, employeeUpdateDTO, companyId);
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("register/pmb/{companyId}")]
+        public async Task<IActionResult> RegisterParkmemberAsync([FromBody] ParkMemberCreateDTO parkMemberCreateDTO, Guid companyId)
+        {
+            var result = await _parkMemberService.InsertAsync(parkMemberCreateDTO, companyId);
+            return Ok(result); 
         }
     }
 }

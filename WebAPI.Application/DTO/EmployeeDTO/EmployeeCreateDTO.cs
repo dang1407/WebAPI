@@ -31,8 +31,12 @@ namespace WebAPI.Application
         [DateNotInFuture(ErrorMessageResourceType = typeof(EmployeeResource), ErrorMessageResourceName = "DateOfBirthNotInFuture")]
         [DateOfBirthValidate(18, 70, ErrorMessageResourceType = typeof(EmployeeResource), ErrorMessageResourceName = "DateOfBirthNotValid")]
         public DateTimeOffset? DateOfBirth { get; set; }
+        [Required(ErrorMessage = "UserName không được để trống")]
+        public string UserName = string.Empty;
 
-
+        [Required(ErrorMessage = "Mật khẩu ko để trống")]
+        public string Password = string.Empty;
+        public string Role = "employee";
         public Guid DepartmentId { get; set; }  
         public Gender? Gender { get; set; }
 

@@ -15,9 +15,9 @@ namespace WebAPI.Controllers
     {
         private IParkMemberService _parkMemberService;
         private readonly ICloudinaryService _cloudinaryService;
-        private readonly IAccountService _userService;
+        private readonly IUserService _userService;
         
-        public ParkMembersController(IParkMemberService parkMemberService, ICloudinaryService cloudinaryService, IAccountService userService) : base(parkMemberService)
+        public ParkMembersController(IParkMemberService parkMemberService, ICloudinaryService cloudinaryService, IUserService userService) : base(parkMemberService)
         {
             _parkMemberService = parkMemberService;
             _cloudinaryService = cloudinaryService; 
